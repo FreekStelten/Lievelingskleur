@@ -1,8 +1,13 @@
 {
   "colors": [
-    "rood",
-    "blauw",
-    "groen",
-    "geel"
+    { "name": "Red" },
+    
+    {"name": "Green" },
+
+    { "name": "Blue"  },
+
+     { "name": "Yellow"},
+
+     { "name": "orange"}
   ]
 }
