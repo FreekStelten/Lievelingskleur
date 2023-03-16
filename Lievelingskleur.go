@@ -11,15 +11,20 @@ type Colors struct {
         Name string `json:"name"`
     } `json:"colors"`
 }
+func Filenotfound (){
 
+ // Lees het JSON-bestand
+ func (getcolor)
+ file, err := ioutil.ReadFile("colors.json")
+ if err != nil {
+     fmt.Println("Error reading JSON file:", err)
+     return func Filenotfound
+ }
+
+}
 func main() {
-    // Lees het JSON-bestand
-    file, err := ioutil.ReadFile("colors.json")
-    if err != nil {
-        fmt.Println("Error reading JSON file:", err)
-        return
-    }
-
+   
+    
     // Decodeer de JSON-data, haalt de data eruit.
     var colors Colors
     err = json.Unmarshal(file, &colors)
@@ -52,7 +57,7 @@ func main() {
         chosenColor = colors.Colors[4].Name   
     default:
         fmt.Println("foute keuze")
-        return
+        return 
     }
 
     // Toon de gekozen kleur in de terminal
