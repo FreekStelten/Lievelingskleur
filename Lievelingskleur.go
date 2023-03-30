@@ -4,85 +4,66 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"os"
 )
-
+//Dit definieert de "Colors" structuur met één veld "Colors" dat een slice is van anonieme structuren die elk één veld hebben, genaamd "Name".
 type Colors struct {
 	Colors []struct {
 		Name string `json:"name"`
 	} `json:"colors"`
 }
-
-func readJSONFile(filePath string) (bool, error) {
+//readJSONFile retourneert Colors-struct en error. bij fout lezen van JSON-bestand, error geretourneerd.
+func readJSONFile(filePath string) (Colors, error) {
 	file, err := ioutil.ReadFile(filePath)
 	if err != nil {
-		return false, err
+		return Colors{}, err
 	}
 
 	var colors Colors
 	err = json.Unmarshal(file, &colors)
 	if err != nil {
-		return false, err
+		return Colors{}, err
 	}
 
-	return true, nil
+	return colors, nil
 }
-
+//In de main-functie, worden de waarden geretourneerd door de functie readJSONFile opgeslagen in de variabelen colors en err.
+//fout bij het lezen van het JSON-bestand, wordt het bestand "error.txt" weergegeven en wordt het programma afgesloten.
 func main() {
-	success, err := readJSONFile("colors.json")
+	colors, err := readJSONFile("colors.json")
 	if err != nil {
-		content, err := os.ReadFile("error.txt")
+		content, err := ioutil.ReadFile("error.txt")
 		if err != nil {
 			fmt.Println("error reading error.txt", err)
+			return
 		}
 		fmt.Println(string(content))
+		return
 	}
 
-	if success {
-		var colors Colors
-
-		// Lees het JSON-bestand
-		file, err := ioutil.ReadFile("colors.json")
-		if err != nil {
-			fmt.Println("Error reading JSON file:", err)
-			return
-		}
-
-		// Decodeer de JSON-data, haalt de data eruit.
-		err = json.Unmarshal(file, &colors)
-		if err != nil {
-			fmt.Println("Error decoding JSON file:", err)
-			return
-		}
-
-		// Toont de kleurnamen in de terminal
-		fmt.Println("kies een van de onderstaande kleuren(nummer):")
-		for i, color := range colors.Colors {
-			fmt.Printf("%d. %s\n", i+1, color.Name)
-		}
-
-		// Kies een kleur met een switch-statement
-		var choice int
-		fmt.Scanln(&choice)
-
-		var chosenColor string
-		switch choice {
-		case 1:
-			chosenColor = colors.Colors[0].Name
-		case 2:
-			chosenColor = colors.Colors[1].Name
-		case 3:
-			chosenColor = colors.Colors[2].Name
-		case 4:
-			chosenColor = colors.Colors[3].Name
-		case 5:
-			chosenColor = colors.Colors[4].Name
-		default:
-			fmt.Println("foute keuze")
-			return
-		}
-
-		// Toon de gekozen kleur in de terminal
-		fmt.Printf("je kiest kleur %s\n", chosenColor)
+	fmt.Println("Kies een van de onderstaande kleuren (nummer):")
+	for i, color := range colors.Colors {
+		fmt.Printf("%d. %s\n", i+1, color.Name)
 	}
+
+	var choice int
+	fmt.Scanln(&choice)
+
+	var chosenColor string
+	switch choice {
+	case 1:
+		chosenColor = colors.Colors[0].Name
+	case 2:
+		chosenColor = colors.Colors[1].Name
+	case 3:
+		chosenColor = colors.Colors[2].Name
+	case 4:
+		chosenColor = colors.Colors[3].Name
+	case 5:
+		chosenColor = colors.Colors[4].Name
+	default:
+		fmt.Println("foute keuze")
+		return
+	}
+
+	fmt.Printf("Je hebt gekozen voor kleur %s\n", chosenColor)
 }
